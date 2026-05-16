@@ -16,10 +16,11 @@ export default function Sidebar() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
+    window.location.reload();
   };
 
   return (
-    <div className="w-64 min-h-screen bg-slate-900 text-white p-6 flex flex-col">
+    <div className="w-64 h-screen bg-slate-900 text-white p-6 flex flex-col justify-between">
       <div>
         <h1 className="text-3xl font-bold mb-8">Supply Chain AI</h1>
 
@@ -43,7 +44,7 @@ export default function Sidebar() {
 
       <button
         onClick={handleLogout}
-        className="mt-auto w-full text-left px-4 py-3 rounded-xl bg-red-600 hover:bg-red-700 transition"
+        className="w-full text-left px-4 py-3 rounded-xl bg-red-600 hover:bg-red-700 transition font-semibold"
       >
         Logout
       </button>
