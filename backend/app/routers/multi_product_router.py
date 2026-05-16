@@ -34,7 +34,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 
-from app.database import get_db             # reuse your existing DB dependency
+from app.core.database import get_db             # reuse your existing DB dependency
 from app.schemas.multi_product_schemas import (
     AIInsightsSchema,
     InventoryMetricSchema,
