@@ -33,7 +33,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, s
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
-from app.routers.auth import get_current_user       # reuse your existing JWT dependency
+
 from app.database import get_db             # reuse your existing DB dependency
 from app.schemas.multi_product_schemas import (
     AIInsightsSchema,
@@ -90,7 +90,7 @@ async def upload_multi_product_forecast(
     top_n: int = Form(default=20),
     forecast_horizon: int = Form(default=7),
     max_products: int = Form(default=200),
-    current_user=Depends(get_current_user),
+    ,
     db: Session = Depends(get_db),
 ):
     start_time = time.perf_counter()
