@@ -29,11 +29,50 @@ export default function App() {
           }
         />
 
-        <Route path="/forecast" element={<ProtectedRoute><Placeholder title="Forecast" /></ProtectedRoute>} />
-        <Route path="/upload" element={<ProtectedRoute><Placeholder title="CSV Upload" /></ProtectedRoute>} />
-        <Route path="/insights" element={<ProtectedRoute><Placeholder title="AI Insights" /></ProtectedRoute>} />
-        <Route path="/history" element={<ProtectedRoute><Placeholder title="History" /></ProtectedRoute>} />
-        <Route path="/settings" element={<ProtectedRoute><Placeholder title="Settings" /></ProtectedRoute>} />
+        <Route
+          path="/forecast"
+          element={
+            <ProtectedRoute>
+              <Placeholder title="Forecast" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/upload"
+          element={
+            <ProtectedRoute>
+              <Placeholder title="CSV Upload" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/insights"
+          element={
+            <ProtectedRoute>
+              <Placeholder title="AI Insights" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/history"
+          element={
+            <ProtectedRoute>
+              <Placeholder title="History" />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Placeholder title="Settings" />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
