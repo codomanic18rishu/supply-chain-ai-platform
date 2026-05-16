@@ -55,7 +55,7 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
 
     if not db_user or not verify_password(
         user.password,
-        db_user.hashed_password,
+        db_user.password_hash,
     ):
         raise HTTPException(
             status_code=401,
