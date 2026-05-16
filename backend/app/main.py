@@ -12,7 +12,6 @@ from app.routers import (
     report,
 )
 
-# Create database tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -20,16 +19,19 @@ app = FastAPI(
     version='1.0.0',
 )
 
-# CORS Middleware
+origins = [
+    "http://localhost:5173",
+    "https://supply-chain-ai-platform-kappa.vercel.app",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
-    allow_methods=['*'],
-    allow_headers=['*'],
-    allow_credentials=False,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# Register routers
 app.include_router(auth.router)
 app.include_router(forecast.router)
 app.include_router(upload_forecast.router)
