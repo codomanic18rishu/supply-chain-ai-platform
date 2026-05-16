@@ -22,7 +22,12 @@ export default function Sidebar() {
           <button
             key={item.name}
             onClick={() => navigate(item.path)}
-            className={w-full text-left px-4 py-3 rounded-xl transition }
+            className={
+              "w-full text-left px-4 py-3 rounded-xl transition " +
+              (location.pathname === item.path
+                ? "bg-blue-600"
+                : "hover:bg-blue-600")
+            }
           >
             {item.name}
           </button>
