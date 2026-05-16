@@ -151,7 +151,7 @@ def normalise_columns(df: pd.DataFrame) -> pd.DataFrame:
         logger.info("No product_name column found; using product_id as product_name.")
 
     # Parse date column
-    df["date"] = pd.to_datetime(df["date"], infer_datetime_format=True, errors="coerce")
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
     invalid_dates = df["date"].isna().sum()
     if invalid_dates > 0:
         logger.warning("Dropped %d rows with unparseable dates.", invalid_dates)
