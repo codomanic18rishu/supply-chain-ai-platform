@@ -134,7 +134,7 @@ async def upload_multi_product_forecast(
 
     logger.info(
         "User %s uploaded multi-product CSV: %d rows, %d columns.",
-        current_user.id,
+        1,
         len(df_raw),
         len(df_raw.columns),
     )
@@ -248,7 +248,7 @@ async def upload_multi_product_forecast(
     # from app.services.db_persister import persist_multi_product_session
     # session_id = persist_multi_product_session(
     #     db=db,
-    #     user_id=current_user.id,
+    #     user_id=1,
     #     filename=file.filename,
     #     forecast_output=forecast_output,
     #     inv_result=inv_result,
@@ -334,7 +334,7 @@ async def upload_multi_product_forecast(
 
     logger.info(
         "Multi-product forecast complete for user %s | products=%d | elapsed=%.2fs",
-        current_user.id,
+        1,
         forecast_output.total_products_processed,
         elapsed,
     )
