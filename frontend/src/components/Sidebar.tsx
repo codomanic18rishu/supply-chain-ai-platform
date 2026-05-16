@@ -1,16 +1,17 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const menuItems = [
   { name: "Dashboard", path: "/" },
-  { name: "Forecast", path: "/" },
-  { name: "CSV Upload", path: "/" },
-  { name: "AI Insights", path: "/" },
+  { name: "Forecast", path: "/forecast" },
+  { name: "CSV Upload", path: "/upload" },
+  { name: "AI Insights", path: "/insights" },
   { name: "History", path: "/history" },
-  { name: "Settings", path: "/" },
+  { name: "Settings", path: "/settings" },
 ];
 
 export default function Sidebar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <div className="w-64 min-h-screen bg-slate-900 text-white p-6">
@@ -21,7 +22,7 @@ export default function Sidebar() {
           <button
             key={item.name}
             onClick={() => navigate(item.path)}
-            className="w-full text-left px-4 py-3 rounded-xl hover:bg-blue-600 transition"
+            className={w-full text-left px-4 py-3 rounded-xl transition }
           >
             {item.name}
           </button>
