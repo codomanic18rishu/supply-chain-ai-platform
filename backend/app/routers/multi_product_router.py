@@ -90,7 +90,6 @@ async def upload_multi_product_forecast(
     top_n: int = Form(default=20),
     forecast_horizon: int = Form(default=7),
     max_products: int = Form(default=200),
-    ,
     db: Session = Depends(get_db),
 ):
     start_time = time.perf_counter()
