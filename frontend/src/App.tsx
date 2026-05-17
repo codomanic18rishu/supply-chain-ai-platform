@@ -70,8 +70,10 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-      </Routes>
+        <Route path="/multi-product-dashboard" element={<MultiProductDashboard />} />
+</Routes>
     </BrowserRouter>
   );
 }
+
 
