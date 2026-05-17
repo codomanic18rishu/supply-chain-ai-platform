@@ -1,3 +1,4 @@
+import MultiProductDashboard from "./pages/MultiProductDashboard";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -73,3 +74,4 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
