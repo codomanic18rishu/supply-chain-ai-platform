@@ -426,7 +426,7 @@ const TopProductsSection: React.FC<TopProductsProps> = ({
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
       {products.map((p, idx) => {
         const color = CHART_COLORS[idx % CHART_COLORS.length];
-        const growthPositive = (p.demand_growth_rate ?? 0) >= 0;
+        const growthPositive = ((p.growth_rate ?? 0) >= 0);
         return (
           <div
             key={p.product_id}
@@ -1228,6 +1228,7 @@ const MultiProductDashboard: React.FC = () => {
 };
 
 export default MultiProductDashboard;
+
 
 
 
