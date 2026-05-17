@@ -1188,10 +1188,12 @@ const MultiProductDashboard: React.FC = () => {
 
             {/* ── Top Products ── */}
             {data.top_products?.length > 0 && (
-              <TopProductsSection
-                products={data.top_products}
-                currency={currency}
-              />
+              <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 text-white">
+  <h2 className="text-2xl font-bold mb-2">Top Products</h2>
+  <p className="text-slate-400">
+    Top Products section temporarily disabled while debugging.
+  </p>
+</div>
             )}
 
             {/* ── Forecast Chart ── */}
@@ -1228,6 +1230,7 @@ const MultiProductDashboard: React.FC = () => {
 };
 
 export default MultiProductDashboard;
+
 
 
 
