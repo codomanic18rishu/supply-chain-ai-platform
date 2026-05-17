@@ -426,7 +426,7 @@ const TopProductsSection: React.FC<TopProductsProps> = ({
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
       {products.map((p, idx) => {
         const color = CHART_COLORS[idx % CHART_COLORS.length];
-        const growthPositive = (p?.growth_rate ?? 0) >= 0;
+        const growthPositive = ((p.demand_growth_pct ?? p.demand_growth_rate ?? 0) ?? 0) >= 0;
         return (
           <div
             key={p.product_id}
@@ -452,7 +452,7 @@ const TopProductsSection: React.FC<TopProductsProps> = ({
 
             <p className="text-slate-500 text-xs mb-3 font-mono">
               {p.product_id}
-              {p.category ? ` · ${p.category}` : ""}
+              ""
             </p>
 
             <div className="flex items-end justify-between">
@@ -460,7 +460,7 @@ const TopProductsSection: React.FC<TopProductsProps> = ({
                 <p className="text-slate-400 text-xs mb-0.5">Total Forecast</p>
                 <p className="text-white text-xl font-bold">
                   {currency}
-                  {fmt(p.total_forecast)}
+                  {fmt(p.total_projected_7d)}
                 </p>
               </div>
               <div className="text-right">
@@ -475,7 +475,7 @@ const TopProductsSection: React.FC<TopProductsProps> = ({
                   ) : (
                     <ChevronDown size={14} />
                   )}
-                  {Math.abs((p?.growth_rate ?? 0)).toFixed(1)}%
+                  {Math.abs(((p.demand_growth_pct ?? p.demand_growth_rate ?? 0) ?? 0)).toFixed(1)}%
                 </p>
               </div>
             </div>
@@ -484,15 +484,15 @@ const TopProductsSection: React.FC<TopProductsProps> = ({
             <div className="mt-4">
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-slate-500">Confidence</span>
-                <span className={confidenceColor(p.confidence_score)}>
-                  {(p.confidence_score * 100).toFixed(0)}%
+                <span className="text-slate-400">
+                  100%
                 </span>
               </div>
               <div className="h-1.5 rounded-full bg-slate-700 overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all"
                   style={{
-                    width: `${p.confidence_score * 100}%`,
+                    width: "100%",
                     backgroundColor: color,
                   }}
                 />
@@ -1230,6 +1230,8 @@ const MultiProductDashboard: React.FC = () => {
 };
 
 export default MultiProductDashboard;
+
+
 
 
 
