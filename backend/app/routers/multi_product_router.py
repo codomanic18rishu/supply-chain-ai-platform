@@ -322,7 +322,8 @@ async def upload_multi_product_forecast(
         },
     }
 
-    metadata["session_id"] = 999`n`n    response = MultiProductForecastResponse(
+    metadata["session_id"] = 999
+    response = MultiProductForecastResponse(
         products=product_schemas,
         top_products=top_product_schemas,
         inventory_metrics=inv_schemas,
