@@ -17,7 +17,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
+
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
@@ -647,7 +647,7 @@ const ForecastChartSection: React.FC<ForecastChartProps> = ({
                 fontSize: 12,
               }}
               labelStyle={{ color: "#94a3b8", marginBottom: 4 }}
-              formatter={(value: number) => [fmt(value, 1), ""]}
+              formatter={(value: any) => [fmt(Number(value || 0), 1), ""]}
             />
             {splitDate && (
               <ReferenceLine
