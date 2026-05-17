@@ -39,7 +39,7 @@ import {
   CloudUpload,
   X,
 } from "lucide-react";
-import api from "../api";
+import api from "../services/api";
 
 // ─────────────────────────────────────────────
 // TypeScript Interfaces — matches backend schema
