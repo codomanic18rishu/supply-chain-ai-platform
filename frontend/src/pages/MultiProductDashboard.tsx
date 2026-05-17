@@ -28,8 +28,7 @@ import {
   Package,
   Brain,
   FileText,
-  ChevronUp,
-  ChevronDown,
+ 
   Minus,
   RefreshCw,
   ShieldAlert,
@@ -184,11 +183,7 @@ function fmtDate(iso: string): string {
   }
 }
 
-function confidenceColor(score: number): string {
-  if (score >= 0.85) return "text-emerald-400";
-  if (score >= 0.65) return "text-yellow-400";
-  return "text-red-400";
-}
+
 
 // ─────────────────────────────────────────────
 // Sub-components
@@ -408,102 +403,9 @@ const StatCard: React.FC<StatCardProps> = ({
 
 // ── Top Products ──────────────────────────────
 
-interface TopProductsProps {
-  products: TopProduct[];
-  currency: string;
-}
 
-const TopProductsSection: React.FC<TopProductsProps> = ({
-  products,
-  currency,
-}) => (
-  <section>
-    <SectionHeader
-      icon={<TrendingUp size={16} />}
-      title="Top Products"
-      subtitle="Ranked by forecast volume"
-    />
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-      {products.map((p, idx) => {
-        const color = CHART_COLORS[idx % CHART_COLORS.length];
-        const growthPositive = ((p.demand_growth_pct ?? p.demand_growth_rate ?? 0) ?? 0) >= 0;
-        return (
-          <div
-            key={p.product_id}
-            className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-5 relative overflow-hidden group hover:border-slate-600 transition-colors"
-          >
-            {/* Rank badge */}
-            <div
-              className="absolute top-0 right-0 w-12 h-12 flex items-end justify-start pb-1 pl-1 rounded-bl-2xl font-black text-sm opacity-20"
-              style={{ backgroundColor: color + "40", color }}
-            >
-              #{p.rank}
-            </div>
 
-            <div className="flex items-center gap-2 mb-3">
-              <div
-                className="w-2.5 h-2.5 rounded-full shrink-0"
-                style={{ backgroundColor: color }}
-              />
-              <span className="text-white font-semibold text-sm truncate">
-                {p.product_name}
-              </span>
-            </div>
 
-            <p className="text-slate-500 text-xs mb-3 font-mono">
-              {p.product_id}
-              ""
-            </p>
-
-            <div className="flex items-end justify-between">
-              <div>
-                <p className="text-slate-400 text-xs mb-0.5">Total Forecast</p>
-                <p className="text-white text-xl font-bold">
-                  {currency}
-                  {fmt(p.total_projected_7d)}
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-slate-400 text-xs mb-0.5">Growth</p>
-                <p
-                  className={`text-sm font-semibold flex items-center gap-0.5 justify-end ${
-                    growthPositive ? "text-emerald-400" : "text-red-400"
-                  }`}
-                >
-                  {growthPositive ? (
-                    <ChevronUp size={14} />
-                  ) : (
-                    <ChevronDown size={14} />
-                  )}
-                  {Math.abs(((p.demand_growth_pct ?? p.demand_growth_rate ?? 0) ?? 0)).toFixed(1)}%
-                </p>
-              </div>
-            </div>
-
-            {/* Confidence bar */}
-            <div className="mt-4">
-              <div className="flex justify-between text-xs mb-1">
-                <span className="text-slate-500">Confidence</span>
-                <span className="text-slate-400">
-                  100%
-                </span>
-              </div>
-              <div className="h-1.5 rounded-full bg-slate-700 overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all"
-                  style={{
-                    width: "100%",
-                    backgroundColor: color,
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  </section>
-);
 
 // ── Forecast Chart ────────────────────────────
 
@@ -1091,7 +993,7 @@ const MultiProductDashboard: React.FC = () => {
     setError(null);
   };
 
-  const currency = data?.metadata?.currency ?? "";
+  
 
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans">
