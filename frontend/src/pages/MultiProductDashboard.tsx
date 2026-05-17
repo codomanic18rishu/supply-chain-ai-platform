@@ -1062,7 +1062,7 @@ const MultiProductDashboard: React.FC = () => {
 
     try {
       const response = await api.post<MultiProductForecastResponse>(
-        "/api/upload-multi-product-forecast/",
+       "http://localhost:8000/api/upload-multi-product-forecast/",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -1228,4 +1228,5 @@ const MultiProductDashboard: React.FC = () => {
 };
 
 export default MultiProductDashboard;
+
 
