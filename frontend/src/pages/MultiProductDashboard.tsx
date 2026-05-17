@@ -973,7 +973,7 @@ const InsightsSection: React.FC<InsightsProps> = ({
     />
 
     {executiveSummary && (
-      <div className="bg-gradient-to-br from-sky-950/60 to-violet-950/40 border border-sky-700/30 rounded-2xl p-6 mb-4">
+      <div className="bg-linear-to-br from-sky-950/60 to-violet-950/40 border border-sky-700/30 rounded-2xl p-6 mb-4">
         <div className="flex items-center gap-2 mb-3">
           <Brain size={14} className="text-sky-400" />
           <span className="text-sky-400 text-xs font-semibold uppercase tracking-wider">
