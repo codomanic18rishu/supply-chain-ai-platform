@@ -322,7 +322,6 @@ async def upload_multi_product_forecast(
         },
     }
 
-    metadata["session_id"] = 999
     response = MultiProductForecastResponse(
         products=product_schemas,
         top_products=top_product_schemas,
@@ -341,15 +340,3 @@ async def upload_multi_product_forecast(
     )
 
     return response
-
-    # -----------------------------
-    # Phase 2: Persist results to database
-    # -----------------------------
-    try:
-        from app.models.multi_product_models import MultiProductSession
-
-        session = MultiProductSession(
-            user_id=1,
-            filename=metadata["filename"],
-            total_products=metadata["products_processed"],
-            processing_time_seconds=metadata["processing_time_seconds"]
