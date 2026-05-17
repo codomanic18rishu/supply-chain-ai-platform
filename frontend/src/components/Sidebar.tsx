@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 const menuItems = [
   { name: "Dashboard", path: "/" },
   { name: "Forecast", path: "/" },
-  { name: "CSV Upload", path: "/" },
+  { name: "CSV Upload", path: "/multi-product-dashboard" },
   { name: "AI Insights", path: "/" },
   { name: "History", path: "/history" },
   { name: "Settings", path: "/settings" },
