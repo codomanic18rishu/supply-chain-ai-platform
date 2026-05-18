@@ -19,7 +19,8 @@ import {
   Tooltip,
 
   ResponsiveContainer,
-  ReferenceLine,
+  //ReferenceLine,
+
 } from "recharts";
 import {
   Upload,
@@ -406,11 +407,10 @@ const StatCard: React.FC<StatCardProps> = ({
 
 
 
-
 // ── Forecast Chart ────────────────────────────
 
 interface ForecastChartProps {
-  data: Record<string, ForecastDataPoint[]>;
+  data: Record<string, any>;
   products: TopProduct[];
 }
 
@@ -422,66 +422,49 @@ const ForecastChartSection: React.FC<ForecastChartProps> = ({
     Object.keys(data)[0] ?? ""
   );
 
-  const chartData = data[selectedProduct] ?? [];
+  const raw = data[selectedProduct];
   const product = products.find((p) => p.product_id === selectedProduct);
 
-  // Find the boundary between historical and forecast
-  const firstForecastIdx = chartData.findIndex(
-    (d) => d.historical == null && d.forecast != null
-  );
-  const splitDate =
-    firstForecastIdx > 0 ? chartData[firstForecastIdx].date : null;
+  if (!raw) return null;
 
-  // Flatten to recharts-friendly format
-  const merged = chartData.map((d) => ({
-    date: fmtDate(d.date),
-    rawDate: d.date,
-    historical: d.historical ?? undefined,
-    forecast: d.forecast ?? undefined,
-    lower: d.lower_bound ?? undefined,
-    upper: d.upper_bound ?? undefined,
-  }));
+  // Backend arrays ko Recharts format me convert karo
+  const merged = [
+    ...((raw.historical_dates ?? []).map((date: string, i: number) => ({
+      date: fmtDate(date),
+      historical: raw.historical_values?.[i],
+      forecast: null,
+    }))),
+    ...((raw.forecast_dates ?? []).map((date: string, i: number) => ({
+      date: fmtDate(date),
+      historical: null,
+      forecast: raw.forecast_values?.[i],
+    }))),
+  ];
 
   return (
     <section>
       <SectionHeader
         icon={<BarChart3 size={16} />}
         title="Historical vs Forecast"
-        subtitle="Demand trend with confidence interval"
+        subtitle="Demand trend over time"
       />
 
-      {/* Product selector */}
+      {/* Product Selector */}
       <div className="flex flex-wrap gap-2 mb-6">
-        {Object.keys(data).map((pid, idx) => {
+        {Object.keys(data).map((pid) => {
           const prod = products.find((p) => p.product_id === pid);
-          const color = CHART_COLORS[idx % CHART_COLORS.length];
           const active = pid === selectedProduct;
+
           return (
             <button
               key={pid}
               onClick={() => setSelectedProduct(pid)}
-              className={`
-                flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all
-                ${
-                  active
-                    ? "text-white border"
-                    : "bg-slate-800 text-slate-400 border border-slate-700 hover:border-slate-600"
-                }
-              `}
-              style={
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
                 active
-                  ? {
-                      backgroundColor: color + "22",
-                      borderColor: color + "66",
-                      color,
-                    }
-                  : {}
-              }
+                  ? "bg-sky-500/20 border-sky-500 text-sky-400"
+                  : "bg-slate-800 border-slate-700 text-slate-400"
+              }`}
             >
-              <span
-                className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: color }}
-              />
               {prod?.product_name ?? pid}
             </button>
           );
@@ -489,91 +472,31 @@ const ForecastChartSection: React.FC<ForecastChartProps> = ({
       </div>
 
       <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <p className="text-white font-semibold text-sm">
-              {product?.product_name ?? selectedProduct}
-            </p>
-            <p className="text-slate-500 text-xs">
-              {product?.category ?? "Demand forecast"}
-            </p>
-          </div>
-          <div className="flex items-center gap-4 text-xs text-slate-400">
-            <span className="flex items-center gap-1.5">
-              <span className="w-4 h-0.5 rounded bg-sky-400 inline-block" />
-              Historical
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span
-                className="w-4 h-0.5 rounded inline-block"
-                style={{
-                  background:
-                    "repeating-linear-gradient(90deg,#a78bfa 0,#a78bfa 4px,transparent 4px,transparent 8px)",
-                }}
-              />
-              Forecast
-            </span>
-          </div>
-        </div>
+        <h3 className="text-white font-semibold mb-4">
+          {product?.product_name ?? selectedProduct}
+        </h3>
 
         <ResponsiveContainer width="100%" height={320}>
-          <LineChart
-            data={merged}
-            margin={{ top: 8, right: 20, left: 0, bottom: 0 }}
-          >
+          <LineChart data={merged}>
             <CartesianGrid
               strokeDasharray="3 3"
               stroke="#334155"
               vertical={false}
             />
-            <XAxis
-              dataKey="date"
-              tick={{ fill: "#64748b", fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-              interval="preserveStartEnd"
-            />
-            <YAxis
-              tick={{ fill: "#64748b", fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-              tickFormatter={(v) => fmt(v)}
-              width={48}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "#1e293b",
-                border: "1px solid #334155",
-                borderRadius: "12px",
-                color: "#f1f5f9",
-                fontSize: 12,
-              }}
-              labelStyle={{ color: "#94a3b8", marginBottom: 4 }}
-              formatter={(value: any) => [fmt(Number(value || 0), 1), ""]}
-            />
-            {splitDate && (
-              <ReferenceLine
-                x={fmtDate(splitDate)}
-                stroke="#475569"
-                strokeDasharray="4 4"
-                label={{
-                  value: "Forecast start",
-                  position: "top",
-                  fill: "#64748b",
-                  fontSize: 10,
-                }}
-              />
-            )}
+            <XAxis dataKey="date" stroke="#94a3b8" />
+            <YAxis stroke="#94a3b8" />
+            <Tooltip />
+
             <Line
               type="monotone"
               dataKey="historical"
               stroke="#38bdf8"
               strokeWidth={2}
               dot={false}
-              activeDot={{ r: 4, fill: "#38bdf8" }}
-              connectNulls
+              connectNulls={false}
               name="Historical"
             />
+
             <Line
               type="monotone"
               dataKey="forecast"
@@ -581,29 +504,8 @@ const ForecastChartSection: React.FC<ForecastChartProps> = ({
               strokeWidth={2}
               strokeDasharray="6 3"
               dot={false}
-              activeDot={{ r: 4, fill: "#a78bfa" }}
-              connectNulls
+              connectNulls={false}
               name="Forecast"
-            />
-            <Line
-              type="monotone"
-              dataKey="upper"
-              stroke="#a78bfa"
-              strokeWidth={0.75}
-              strokeOpacity={0.4}
-              dot={false}
-              connectNulls
-              name="Upper Bound"
-            />
-            <Line
-              type="monotone"
-              dataKey="lower"
-              stroke="#a78bfa"
-              strokeWidth={0.75}
-              strokeOpacity={0.4}
-              dot={false}
-              connectNulls
-              name="Lower Bound"
             />
           </LineChart>
         </ResponsiveContainer>
@@ -1050,39 +952,50 @@ const MultiProductDashboard: React.FC = () => {
               <SectionHeader
                 icon={<FileText size={16} />}
                 title="Report Summary"
-                subtitle={`Generated ${new Date(
-                  data.metadata.report_generated_at
-                ).toLocaleString()}`}
+                subtitle={`Generated ${
+  data?.metadata?.report_generated_at
+    ? new Date(data.metadata.report_generated_at).toLocaleString()
+    : new Date().toLocaleString()
+}`}
               />
               <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-4">
                 <StatCard
                   icon={<Package size={16} />}
                   label="Products Analyzed"
-                  value={String(data.metadata.total_products_analyzed)}
+                  value={(data as any)?.metadata?.products_analyzed ??
+ (data as any)?.metadata?.total_products_processed ??
+ (data as any)?.top_products?.length ??
+ 0}
                   accent="text-sky-400"
                 />
                 <StatCard
                   icon={<Boxes size={16} />}
                   label="Total SKUs"
-                  value={String(data.metadata.total_sku_count ?? "—")}
+                  value={String((data as any)?.products?.length ?? 0)}
                   accent="text-violet-400"
                 />
                 <StatCard
                   icon={<TrendingUp size={16} />}
                   label="Forecast Horizon"
-                  value={`${data.metadata.forecast_horizon_days}d`}
+                  value={(data as any)?.metadata?.forecast_horizon ??
+ (data as any)?.metadata?.forecast_days ??
+ 7}
                   accent="text-emerald-400"
                 />
                 <StatCard
                   icon={<Cpu size={16} />}
                   label="Model Version"
-                  value={data.metadata.model_version ?? "—"}
+                 value="Prophet + Inventory AI v1.0"
                   accent="text-yellow-400"
                 />
                 <StatCard
                   icon={<RefreshCw size={16} />}
                   label="Data Freshness"
-                  value={data.metadata.data_freshness ?? "—"}
+                 value={
+  (data?.metadata as any)?.latest_data_date
+    ? fmtDate((data.metadata as any).latest_data_date)
+    : "Current"
+}
                   accent="text-orange-400"
                 />
               </div>
@@ -1093,37 +1006,98 @@ const MultiProductDashboard: React.FC = () => {
               <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 text-white">
   <h2 className="text-2xl font-bold mb-2">Top Products</h2>
   <p className="text-slate-400">
-    Top Products section temporarily disabled while debugging.
+   {`${(data as any)?.top_products?.length ?? 0} top products identified`}
   </p>
 </div>
             )}
 
-            {/* ── Forecast Chart ── */}
-            {data.forecast_chart_data &&
-              Object.keys(data.forecast_chart_data).length > 0 && (
-                <ForecastChartSection
-                  data={data.forecast_chart_data}
-                  products={data.top_products}
-                />
-              )}
-
-            {/* ── Inventory Optimization ── */}
-            {data.inventory_optimizations?.length > 0 && (
-              <InventorySection items={data.inventory_optimizations} />
-            )}
+       {/* ── Forecast Chart ── */}
+{((data as any).products?.length ?? 0) > 0 ? (
+  <ForecastChartSection
+    data={
+      Object.fromEntries(
+        ((data as any).products ?? []).map((product: any) => [
+          product.product_id,
+          product,
+        ])
+      ) as Record<string, any>
+    }
+    products={(data as any).top_products ?? []}
+  />
+) : null}
+           {/* ── Inventory Optimization ── */}
+{((data as any).inventory_optimizations ??
+  (data as any).inventory_metrics)?.length > 0 && (
+  <InventorySection
+    items={
+      ((data as any).inventory_optimizations ??
+        (data as any).inventory_metrics) as InventoryOptimization[]
+    }
+  />
+)}
 
             {/* ── Risk Alerts ── */}
             {data.risk_alerts?.length > 0 && (
               <RiskAlertsSection alerts={data.risk_alerts} />
             )}
+{/* ── AI Insights ── */}
+{(data as any)?.ai_insights && (
+  <InsightsSection
+    insights={[
+      ...(((data as any).ai_insights.urgent_actions ?? []).length > 0
+        ? [
+            {
+              title: "Urgent Actions",
+              body: ((data as any).ai_insights.urgent_actions as string[]).join(
+                " "
+              ),
+              tags: ["Priority", "Action"],
+            },
+          ]
+        : []),
 
-            {/* ── AI Insights ── */}
-            {(data.ai_insights?.length > 0 || data.executive_summary) && (
-              <InsightsSection
-                insights={data.ai_insights ?? []}
-                executiveSummary={data.executive_summary}
-              />
-            )}
+      ...(((data as any).ai_insights.fastest_growing ?? []).length > 0
+        ? [
+            {
+              title: "Fastest Growing Products",
+              body: (
+                (data as any).ai_insights.fastest_growing as string[]
+              ).join(" "),
+              tags: ["Growth", "Demand"],
+            },
+          ]
+        : []),
+
+      ...(((data as any).ai_insights.optimization_recs ?? []).length > 0
+        ? [
+            {
+              title: "Inventory Optimization",
+              body: (
+                (data as any).ai_insights.optimization_recs as string[]
+              ).join(" "),
+              tags: ["Inventory", "Optimization"],
+            },
+          ]
+        : []),
+
+      ...(((data as any).ai_insights.risk_summary ?? []).length > 0
+        ? [
+            {
+              title: "Risk Summary",
+              body: ((data as any).ai_insights.risk_summary as string[]).join(
+                " "
+              ),
+              tags: ["Risk", "Monitoring"],
+            },
+          ]
+        : []),
+    ]}
+    executiveSummary={
+      (data as any).ai_insights.executive_summary ||
+      "AI-generated executive insights are available."
+    }
+  />
+)}
           </div>
         )}
       </main>
