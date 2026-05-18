@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import Base, engine
 from app.models import models
 from app.routers import (
+    multi_product_router,
+
     auth,
     forecast,
     upload_forecast,
@@ -59,3 +61,9 @@ def cors_test():
     return {
         'message': 'CORS middleware is active'
     }
+
+
+
+
+app.include_router(multi_product_router.router)
+

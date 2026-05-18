@@ -49,7 +49,7 @@ export default function Login() {
   };
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 flex items-center justify-center p-6'>
+    <div className='min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-indigo-950 flex items-center justify-center p-6'>
       <div className='w-full max-w-md rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8 shadow-2xl text-white'>
         <p className='text-cyan-300 text-sm font-medium mb-2'>
           Welcome Back
