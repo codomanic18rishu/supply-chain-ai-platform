@@ -866,7 +866,7 @@ const MultiProductDashboard: React.FC = () => {
 
     try {
       const response = await api.post<MultiProductForecastResponse>(
-       "http://localhost:8000/api/upload-multi-product-forecast/",
+         "/upload-multi-product-forecast/",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

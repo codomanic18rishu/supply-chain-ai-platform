@@ -16,9 +16,9 @@ app = FastAPI(
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["*", "http://localhost:5173/"],
+    allow_methods=["*", "http://localhost:5173/"],
+    allow_headers=["*", "http://localhost:5173/"],
     allow_credentials=False,
 )
 
@@ -38,7 +38,7 @@ def root():
 @app.get("/health")
 def health():
     return {
-        "status": "healthy"
+        "status": "healthy api route"
     }
 
 

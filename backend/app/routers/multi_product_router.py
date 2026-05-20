@@ -53,7 +53,7 @@ from app.services.risk_detector import detect_risks
 logger = logging.getLogger(__name__)
 
 router = APIRouter(
-    prefix="/api",
+    # prefix="/api",
     tags=["Multi-Product Forecasting"],
 )
 
@@ -83,6 +83,7 @@ def _dataclass_to_dict(obj) -> dict:
     ),
     status_code=status.HTTP_200_OK,
 )
+
 async def upload_multi_product_forecast(
     file: UploadFile = File(..., description="CSV file with date, product_id, and sales columns."),
     lead_time_days: int = Form(default=7),

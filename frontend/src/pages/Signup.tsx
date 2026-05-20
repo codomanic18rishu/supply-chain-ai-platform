@@ -14,6 +14,7 @@ export default function Signup() {
     setLoading(true);
 
     try {
+      console.log("Signup Debug")
       await api.post('/auth/register', {
         username,
         email,
